@@ -28,10 +28,13 @@ jobs:
         uses: denoland/setup-deno@27e0043effb637fb8409496e05bd8472e4b87554  # v2.0.2
         with:
           deno-version: v2.x
+          
       - name: Verify formatting
+        working-directory: ./tools/invariant_checker
         run: deno fmt --check
 
       - name: Run linter
+        working-directory: ./tools/invariant_checker
         run: deno lint
 
       - name: Validate invariants
