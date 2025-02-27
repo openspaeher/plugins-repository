@@ -1,4 +1,4 @@
-id = "whisper"
+id = "app-search"
 
 [[versions]]
 semver = "0.1.0"

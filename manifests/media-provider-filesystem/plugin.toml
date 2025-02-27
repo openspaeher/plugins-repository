@@ -1,0 +1,4 @@
+id = "media-provider-filesystem"
+
+[[versions]]
+semver = "0.1.0"
