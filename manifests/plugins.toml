@@ -1,0 +1,14 @@
+[[plugins]]
+id = "filesystem"
+name = "Filesystem"
+kind = "MediaProvider"
+
+[[plugins]]
+id = "search"
+name = "Search"
+kind = "App"
+
+[[plugins]]
+id = "whisper"
+name = "Whisper CPU"
+kind = "Transcriber"

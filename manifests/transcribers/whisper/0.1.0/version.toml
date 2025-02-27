@@ -1,0 +1,7 @@
+id = "whisper"
+semver = "0.1.0"
+
+[[packages]]
+arch = "wasm/wasm"
+url = "https://spaeher.b-cdn.net/plugins/transcriber-whisper/0.1.0.tar.gz"
+sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
