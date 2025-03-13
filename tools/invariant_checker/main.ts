@@ -38,6 +38,11 @@ async function checkRepoInvariant() {
     console.log(`Validating "${pluginEntry.id}" plugin`);
     checkPlugin(pluginEntry);
   });
+
+  // TODO Enforce contracts
+  // TODO Enforce that the url in contracts point to the /wit repo WITH a commit hash
+  // Better
+  // TODO Enforce that the commit hash in contracts exists & file exists (build url)
 }
 
 async function checkPlugin(pluginEntry: RootManifestPluginEntry) {
