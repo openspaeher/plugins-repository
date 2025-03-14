@@ -1,5 +1,6 @@
 import { RootManifestPluginEntry } from "./schema.ts";
 
+export const contractsFolderPath = "../../contracts";
 export const manifestFolderPath = "../../manifests";
 export const rootManifestPath = `${manifestFolderPath}/plugins.toml`;
 

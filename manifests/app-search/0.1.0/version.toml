@@ -1,5 +1,6 @@
 id = "app-search"
 semver = "0.1.0"
+contract_semver = "0.1.0"
 
 [[packages]]
 arch = "wasm/wasm"

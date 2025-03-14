@@ -5,6 +5,14 @@ const PluginNameSchema = z.string().regex(new RegExp("(\\w+( \\w+)?)+"));
 const PluginKindSchema = z.enum(["App", "MediaProvider", "Transcriber"]);
 const PluginVersionSchema = z.string();
 
+const ContractKindSchema = z.enum([
+  "App",
+  "Common",
+  "MediaProvider",
+  "Transcriber",
+]);
+const CommitHashSchema = z.string().max(40).min(40);
+
 export const RootManifestPluginEntrySchema = z.object({
   id: PluginIdSchema,
   name: PluginNameSchema,
@@ -33,7 +41,18 @@ export const PluginVersionManifestEntrySchema = z.object({
 export const PluginVersionManifestSchema = z.object({
   id: PluginIdSchema,
   semver: PluginVersionSchema,
+  contract_semver: PluginVersionSchema,
   packages: z.array(PluginVersionManifestEntrySchema),
+});
+
+export const ContractManifestEntrySchema = z.object({
+  semver: PluginVersionSchema,
+  common_semver: z.optional(PluginVersionSchema),
+  commit: CommitHashSchema,
+});
+export const ContractManifestSchema = z.object({
+  id: ContractKindSchema,
+  versions: z.array(ContractManifestEntrySchema),
 });
 
 export type RootManifest = z.infer<typeof RootManifestSchema>;
@@ -48,3 +67,6 @@ export type PluginVersionManifest = z.infer<typeof PluginVersionManifestSchema>;
 export type PluginVersionManifestEntry = z.infer<
   typeof PluginVersionManifestEntrySchema
 >;
+
+export type ContractManifest = z.infer<typeof ContractManifestSchema>;
+export type ContractManifestEntry = z.infer<typeof ContractManifestEntrySchema>;
