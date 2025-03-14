@@ -1,14 +1,14 @@
 [[plugins]]
 id = "app-search"
 name = "Search"
-kind = "App"
+kind = "app"
 
 [[plugins]]
 id = "media-provider-filesystem"
 name = "Filesystem"
-kind = "MediaProvider"
+kind = "media-provider"
 
 [[plugins]]
 id = "transcriber-whisper"
 name = "Whisper CPU"
-kind = "Transcriber"
+kind = "transcriber"

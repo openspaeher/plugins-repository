@@ -2,14 +2,14 @@ import { z } from "npm:zod";
 
 const PluginIdSchema = z.string().regex(new RegExp("([a-z](-[a-z])?)+"));
 const PluginNameSchema = z.string().regex(new RegExp("(\\w+( \\w+)?)+"));
-const PluginKindSchema = z.enum(["App", "MediaProvider", "Transcriber"]);
+const PluginKindSchema = z.enum(["app", "media-provider", "transcriber"]);
 const PluginVersionSchema = z.string();
 
 const ContractKindSchema = z.enum([
-  "App",
-  "Common",
-  "MediaProvider",
-  "Transcriber",
+  "app",
+  "common",
+  "media-provider",
+  "transcriber",
 ]);
 const CommitHashSchema = z.string().max(40).min(40);
 

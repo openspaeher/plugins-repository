@@ -1,4 +1,4 @@
-id = "Common"
+id = "common"
 
 [[versions]]
 semver = "0.1.0"
