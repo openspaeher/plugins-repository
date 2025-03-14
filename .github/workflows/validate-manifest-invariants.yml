@@ -25,10 +25,10 @@ jobs:
 
       - name: Setup Deno
         # uses: denoland/setup-deno@v2
-        uses: denoland/setup-deno@27e0043effb637fb8409496e05bd8472e4b87554  # v2.0.2
+        uses: denoland/setup-deno@27e0043effb637fb8409496e05bd8472e4b87554 # v2.0.2
         with:
           deno-version: v2.x
-          
+
       - name: Verify formatting
         working-directory: ./tools/invariant_checker
         run: deno fmt --check
@@ -39,4 +39,4 @@ jobs:
 
       - name: Validate invariants
         working-directory: ./tools/invariant_checker
-        run: deno --allow-read main.ts
+        run: deno --allow-read --allow-net main.ts

@@ -1,5 +1,5 @@
-id = "common"
+id = "Common"
 
 [[versions]]
 semver = "0.1.0"
-commit = "8ecf4492dc0e3dfc43db090455f5ecee8287ef40"
+commit = "6f67603ab5350f834441d199f411997154b3eb67"

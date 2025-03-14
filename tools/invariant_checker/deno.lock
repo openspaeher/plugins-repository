@@ -6,6 +6,7 @@
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "jsr:@std/semver@*": "1.0.4",
     "jsr:@std/toml@*": "1.0.2",
+    "npm:change-case@*": "5.4.4",
     "npm:semver@*": "7.7.1",
     "npm:zod@*": "3.24.2"
   },
@@ -33,6 +34,9 @@
     }
   },
   "npm": {
+    "change-case@5.4.4": {
+      "integrity": "sha512-HRQyTk2/YPEkt9TnUPbOpr64Uw3KOicFWPVBb+xiHvd6eBx/qPr9xqfBFDT8P2vWsvvz4jbEkfDe71W3VyNu2w=="
+    },
     "semver@7.7.1": {
       "integrity": "sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA=="
     },
