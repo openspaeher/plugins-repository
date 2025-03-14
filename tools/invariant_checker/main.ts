@@ -11,11 +11,11 @@ import {
   RootManifestSchema,
 } from "./schema.ts";
 import {
+  contractsFolderPath,
   getPluginKindFolderRepresentation,
   getPluginManifestPath,
   getPluginVerionManifestPath,
   rootManifestPath,
-  contractsFolderPath,
 } from "./paths.ts";
 
 async function checkRepoInvariant() {
@@ -24,16 +24,16 @@ async function checkRepoInvariant() {
   for await (const file of Deno.readDir(contractsFolderPath)) {
     if (!file.isFile) continue;
     const contractManifest = ContractManifestSchema.parse(
-      parseToml(await Deno.readTextFile(`${contractsFolderPath}/${file.name}`))
+      parseToml(await Deno.readTextFile(`${contractsFolderPath}/${file.name}`)),
     );
     contractVersions.set(
       contractManifest.id,
-      await checkContract(file, contractManifest)
+      await checkContract(file, contractManifest),
     );
   }
 
   const rootManifest = RootManifestSchema.parse(
-    parseToml(await Deno.readTextFile(rootManifestPath))
+    parseToml(await Deno.readTextFile(rootManifestPath)),
   );
 
   const idsArray = rootManifest.plugins.map((p) => p.id);
@@ -41,21 +41,21 @@ async function checkRepoInvariant() {
   assertEquals(
     idsArray.length,
     idsSet.size,
-    "Duplicate plugin ids are not allowed."
+    "Duplicate plugin ids are not allowed.",
   );
 
   const idsArrayOrdered = idsArray.toSorted();
   assertEquals(
     idsArray,
     idsArrayOrdered,
-    "Plugins must be ordered by their id."
+    "Plugins must be ordered by their id.",
   );
 
   rootManifest.plugins.forEach((pluginEntry) => {
     console.log(`Validating "${pluginEntry.id}" plugin`);
     assert(
       contractVersions.get(pluginEntry.kind) !== undefined,
-      `No contract versions found for kind ${pluginEntry.kind}`
+      `No contract versions found for kind ${pluginEntry.kind}`,
     );
     checkPlugin(pluginEntry, contractVersions.get(pluginEntry.kind)!);
   });
@@ -63,21 +63,21 @@ async function checkRepoInvariant() {
 
 async function checkPlugin(
   pluginEntry: RootManifestPluginEntry,
-  contractEntries: string[]
+  contractEntries: string[],
 ) {
   const pluginManifest = PluginManifestSchema.parse(
-    parseToml(await Deno.readTextFile(getPluginManifestPath(pluginEntry)))
+    parseToml(await Deno.readTextFile(getPluginManifestPath(pluginEntry))),
   );
   assertEquals(
     pluginManifest.id,
     pluginEntry.id,
-    formatError("Plugin id must match plugin list entry.", pluginEntry)
+    formatError("Plugin id must match plugin list entry.", pluginEntry),
   );
   assert(
     pluginEntry.id.startsWith(
-      getPluginKindFolderRepresentation(pluginEntry.kind)
+      getPluginKindFolderRepresentation(pluginEntry.kind),
     ),
-    formatError("Plugin id must start with plugin kind.", pluginEntry)
+    formatError("Plugin id must start with plugin kind.", pluginEntry),
   );
 
   const versionsArray = pluginManifest.versions.map((v) =>
@@ -87,16 +87,16 @@ async function checkPlugin(
   assertEquals(
     versionsArray.length,
     verionsSet.size,
-    formatError("Duplicate versions are not allowed.", pluginEntry)
+    formatError("Duplicate versions are not allowed.", pluginEntry),
   );
 
   const versionsArrayOrdered = versionsArray.toSorted(
-    (a, b) => compare(a, b) * -1
+    (a, b) => compare(a, b) * -1,
   );
   assertEquals(
     versionsArray,
     versionsArrayOrdered,
-    formatError("Versions must be ordered in descending order.", pluginEntry)
+    formatError("Versions must be ordered in descending order.", pluginEntry),
   );
 
   pluginManifest.versions.forEach((versionEntry) => {
@@ -107,12 +107,14 @@ async function checkPlugin(
 async function checkPluginVersion(
   pluginEntry: RootManifestPluginEntry,
   version: string,
-  contractVersions: string[]
+  contractVersions: string[],
 ) {
   const pluginVersionManifest = PluginVersionManifestSchema.parse(
     parseToml(
-      await Deno.readTextFile(getPluginVerionManifestPath(pluginEntry, version))
-    )
+      await Deno.readTextFile(
+        getPluginVerionManifestPath(pluginEntry, version),
+      ),
+    ),
   );
   assertEquals(
     pluginVersionManifest.id,
@@ -120,8 +122,8 @@ async function checkPluginVersion(
     formatError(
       "Plugin version id must match plugin list entry.",
       pluginEntry,
-      version
-    )
+      version,
+    ),
   );
   assertEquals(
     pluginVersionManifest.semver,
@@ -129,13 +131,13 @@ async function checkPluginVersion(
     formatError(
       "Plugin version must match plugin version list entry.",
       pluginEntry,
-      version
-    )
+      version,
+    ),
   );
 
   assert(
     contractVersions.includes(pluginVersionManifest.contract_semver),
-    formatError("Plugin contract semver doesn't exist", pluginEntry, version)
+    formatError("Plugin contract semver doesn't exist", pluginEntry, version),
   );
 
   const packageArray = pluginVersionManifest.packages.map((p) => p.arch);
@@ -143,7 +145,7 @@ async function checkPluginVersion(
   assertEquals(
     packageArray.length,
     packageSet.size,
-    formatError("Only one package per arch is allowed.", pluginEntry, version)
+    formatError("Only one package per arch is allowed.", pluginEntry, version),
   );
 
   pluginVersionManifest.packages.forEach((packageEntry) => {
@@ -153,15 +155,15 @@ async function checkPluginVersion(
         "Only packages in the tar.gz format are accepted.",
         pluginEntry,
         version,
-        packageEntry.arch
-      )
+        packageEntry.arch,
+      ),
     );
   });
 }
 
 async function checkContract(
   file: Deno.DirEntry,
-  contractManifest: ContractManifest
+  contractManifest: ContractManifest,
 ): Promise<string[]> {
   console.log(`Validating "${contractManifest.id}" contract`);
   assertEquals(file.name.replace(".toml", ""), kebabCase(contractManifest.id));
@@ -171,26 +173,26 @@ async function checkContract(
   assertEquals(
     versionsArray.length,
     versionsSet.size,
-    "Duplicate versions are not allowed."
+    "Duplicate versions are not allowed.",
   );
 
   const versionsArrayOrdered = versionsArray.toSorted();
   assertEquals(
     versionsArray,
     versionsArrayOrdered,
-    "Versions must be ordered."
+    "Versions must be ordered.",
   );
 
   for (const version of contractManifest.versions) {
     assert(
       (
         await fetch(
-          `https://raw.githubusercontent.com/openspaeher/wit/${
-            version.commit
-          }/${kebabCase(contractManifest.id)}.wit`
+          `https://raw.githubusercontent.com/openspaeher/wit/${version.commit}/${
+            kebabCase(contractManifest.id)
+          }.wit`,
         )
       ).status === 200,
-      `Unable to get contract definition for contract version ${version.semver}`
+      `Unable to get contract definition for contract version ${version.semver}`,
     );
   }
 
@@ -201,7 +203,7 @@ function formatError(
   text: string,
   pluginEntry: RootManifestPluginEntry,
   version?: string,
-  arch?: string
+  arch?: string,
 ) {
   return `${pluginEntry.id}${version == null ? "" : `@${version}`}${
     arch == null ? "" : ` ${arch}`
