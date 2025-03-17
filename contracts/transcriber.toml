@@ -2,5 +2,4 @@ id = "transcriber"
 
 [[versions]]
 semver = "0.1.0"
-common_semver = "0.1.0"
-commit = "6f67603ab5350f834441d199f411997154b3eb67"
+commit = "2d0ffc0c321a9e81d198fda11243620a3159f630"

@@ -5,12 +5,7 @@ const PluginNameSchema = z.string().regex(new RegExp("(\\w+( \\w+)?)+"));
 const PluginKindSchema = z.enum(["app", "media-provider", "transcriber"]);
 const PluginVersionSchema = z.string();
 
-const ContractKindSchema = z.enum([
-  "app",
-  "common",
-  "media-provider",
-  "transcriber",
-]);
+const ContractKindSchema = z.enum(["app", "media-provider", "transcriber"]);
 const CommitHashSchema = z.string().max(40).min(40);
 
 export const RootManifestPluginEntrySchema = z.object({
@@ -47,7 +42,6 @@ export const PluginVersionManifestSchema = z.object({
 
 export const ContractManifestEntrySchema = z.object({
   semver: PluginVersionSchema,
-  common_semver: z.optional(PluginVersionSchema),
   commit: CommitHashSchema,
 });
 export const ContractManifestSchema = z.object({
