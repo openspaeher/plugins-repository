@@ -14,14 +14,14 @@ export function getPluginManifestPath(pluginEntry: RootManifestPluginEntry) {
 
 export function getPluginVerionFolderPath(
   pluginEntry: RootManifestPluginEntry,
-  version: string
+  version: string,
 ) {
   return `${getPluginFolderPath(pluginEntry)}/${version}`;
 }
 
 export function getPluginVerionManifestPath(
   pluginEntry: RootManifestPluginEntry,
-  version: string
+  version: string,
 ) {
   return `${getPluginVerionFolderPath(pluginEntry, version)}/version.toml`;
 }
