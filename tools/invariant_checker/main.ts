@@ -12,7 +12,6 @@ import {
 } from "./schema.ts";
 import {
   contractsFolderPath,
-  getPluginKindFolderRepresentation,
   getPluginManifestPath,
   getPluginVerionManifestPath,
   rootManifestPath,
@@ -74,9 +73,7 @@ async function checkPlugin(
     formatError("Plugin id must match plugin list entry.", pluginEntry),
   );
   assert(
-    pluginEntry.id.startsWith(
-      getPluginKindFolderRepresentation(pluginEntry.kind),
-    ),
+    pluginEntry.id.startsWith(pluginEntry.kind),
     formatError("Plugin id must start with plugin kind.", pluginEntry),
   );
 

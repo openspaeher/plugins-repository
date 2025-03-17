@@ -1,4 +1,4 @@
-id = "App"
+id = "app"
 
 [[versions]]
 semver = "0.1.0"

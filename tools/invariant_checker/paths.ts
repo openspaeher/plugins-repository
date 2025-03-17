@@ -4,19 +4,6 @@ export const contractsFolderPath = "../../contracts";
 export const manifestFolderPath = "../../manifests";
 export const rootManifestPath = `${manifestFolderPath}/plugins.toml`;
 
-export function getPluginKindFolderRepresentation(
-  kind: "App" | "MediaProvider" | "Transcriber",
-): string {
-  switch (kind) {
-    case "App":
-      return "app";
-    case "MediaProvider":
-      return "media-provider";
-    case "Transcriber":
-      return "transcriber";
-  }
-}
-
 export function getPluginFolderPath(pluginEntry: RootManifestPluginEntry) {
   return `${manifestFolderPath}/${pluginEntry.id}`;
 }

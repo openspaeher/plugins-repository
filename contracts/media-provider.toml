@@ -1,4 +1,4 @@
-id = "MediaProvider"
+id = "media-provider"
 
 [[versions]]
 semver = "0.1.0"

@@ -1,4 +1,4 @@
-id = "Transcriber"
+id = "transcriber"
 
 [[versions]]
 semver = "0.1.0"
