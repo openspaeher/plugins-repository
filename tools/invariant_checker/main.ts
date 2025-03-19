@@ -1,36 +1,19 @@
 import { compare, parse as parseSemver } from "jsr:@std/semver";
 import { parse as parseToml } from "jsr:@std/toml";
 import { assert, assertEquals } from "@std/assert";
-import { kebabCase } from "npm:change-case";
 import {
-  ContractManifest,
-  ContractManifestSchema,
   PluginManifestSchema,
   PluginVersionManifestSchema,
   RootManifestPluginEntry,
   RootManifestSchema,
 } from "./schema.ts";
 import {
-  contractsFolderPath,
   getPluginManifestPath,
   getPluginVerionManifestPath,
   rootManifestPath,
 } from "./paths.ts";
 
 async function checkRepoInvariant() {
-  const contractVersions = new Map<string, string[]>();
-
-  for await (const file of Deno.readDir(contractsFolderPath)) {
-    if (!file.isFile) continue;
-    const contractManifest = ContractManifestSchema.parse(
-      parseToml(await Deno.readTextFile(`${contractsFolderPath}/${file.name}`)),
-    );
-    contractVersions.set(
-      contractManifest.id,
-      await checkContract(file, contractManifest),
-    );
-  }
-
   const rootManifest = RootManifestSchema.parse(
     parseToml(await Deno.readTextFile(rootManifestPath)),
   );
@@ -52,18 +35,11 @@ async function checkRepoInvariant() {
 
   rootManifest.plugins.forEach((pluginEntry) => {
     console.log(`Validating "${pluginEntry.id}" plugin`);
-    assert(
-      contractVersions.get(pluginEntry.kind) !== undefined,
-      `No contract versions found for kind ${pluginEntry.kind}`,
-    );
-    checkPlugin(pluginEntry, contractVersions.get(pluginEntry.kind)!);
+    checkPlugin(pluginEntry);
   });
 }
 
-async function checkPlugin(
-  pluginEntry: RootManifestPluginEntry,
-  contractEntries: string[],
-) {
+async function checkPlugin(pluginEntry: RootManifestPluginEntry) {
   const pluginManifest = PluginManifestSchema.parse(
     parseToml(await Deno.readTextFile(getPluginManifestPath(pluginEntry))),
   );
@@ -97,14 +73,13 @@ async function checkPlugin(
   );
 
   pluginManifest.versions.forEach((versionEntry) => {
-    checkPluginVersion(pluginEntry, versionEntry.semver, contractEntries);
+    checkPluginVersion(pluginEntry, versionEntry.semver);
   });
 }
 
 async function checkPluginVersion(
   pluginEntry: RootManifestPluginEntry,
   version: string,
-  contractVersions: string[],
 ) {
   const pluginVersionManifest = PluginVersionManifestSchema.parse(
     parseToml(
@@ -132,11 +107,6 @@ async function checkPluginVersion(
     ),
   );
 
-  assert(
-    contractVersions.includes(pluginVersionManifest.contract_semver),
-    formatError("Plugin contract semver doesn't exist", pluginEntry, version),
-  );
-
   const packageArray = pluginVersionManifest.packages.map((p) => p.arch);
   const packageSet = new Set(packageArray);
   assertEquals(
@@ -156,44 +126,6 @@ async function checkPluginVersion(
       ),
     );
   });
-}
-
-async function checkContract(
-  file: Deno.DirEntry,
-  contractManifest: ContractManifest,
-): Promise<string[]> {
-  console.log(`Validating "${contractManifest.id}" contract`);
-  assertEquals(file.name.replace(".toml", ""), kebabCase(contractManifest.id));
-
-  const versionsArray = contractManifest.versions.map((p) => p.semver);
-  const versionsSet = new Set(versionsArray);
-  assertEquals(
-    versionsArray.length,
-    versionsSet.size,
-    "Duplicate versions are not allowed.",
-  );
-
-  const versionsArrayOrdered = versionsArray.toSorted();
-  assertEquals(
-    versionsArray,
-    versionsArrayOrdered,
-    "Versions must be ordered.",
-  );
-
-  for (const version of contractManifest.versions) {
-    assert(
-      (
-        await fetch(
-          `https://raw.githubusercontent.com/openspaeher/wit/${version.commit}/${
-            kebabCase(contractManifest.id)
-          }.wit`,
-        )
-      ).status === 200,
-      `Unable to get contract definition for contract version ${version.semver}`,
-    );
-  }
-
-  return versionsArray;
 }
 
 function formatError(

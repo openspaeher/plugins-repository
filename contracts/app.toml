@@ -1,5 +1,0 @@
-id = "app"
-
-[[versions]]
-semver = "0.1.0"
-commit = "f36ca452779560a1d6290ad87a56e3d24cb6628c"
