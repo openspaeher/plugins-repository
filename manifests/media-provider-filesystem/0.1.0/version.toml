@@ -4,5 +4,5 @@ contract_semver = "0.1.0"
 
 [[packages]]
 arch = "wasm/wasm"
-url = "https://spaeher.b-cdn.net/plugins/media-provider-fs/0.1.0.tar.gz"
-sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
+url = "https://github.com/openspaeher/plugin-media-provider-fs/releases/download/0.1.0/plugin.tar.gz"
+sha256 = "9a3d0872e26c6684ce3c8f0f1c3727c19b6856ecf3bb7169a24ace01214869ef"
